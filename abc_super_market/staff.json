@@ -1,0 +1,32 @@
+[
+  {
+    "staff_id": "AS7890TG98",
+    "staff_name": "Staff_1",
+    "staff_email": "staff_1@assignment.com",
+    "staff_ph_no": 8412841236
+  },
+  {
+    "staff_id": "AS7890TG77",
+    "staff_name": "Staff_2",
+    "staff_email": "staff_2@assignment.com",
+    "staff_ph_no": 8412841237
+  },
+  {
+    "staff_id": "AS7890TD67",
+    "staff_name": "Staff_3",
+    "staff_email": "staff_3@assignment.com",
+    "staff_ph_no": 8412841238
+  },
+  {
+    "staff_id": "AS7890TW35",
+    "staff_name": "Staff_4",
+    "staff_email": "staff_4@assignment.com",
+    "staff_ph_no": 8412841239
+  },
+  {
+    "staff_id": "AS7890TS10",
+    "staff_name": "Staff_5",
+    "staff_email": "staff_5@assignment.com",
+    "staff_ph_no": 8412841230
+  }
+]

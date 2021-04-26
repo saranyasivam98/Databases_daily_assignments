@@ -1,0 +1,18 @@
+[
+  {
+    "parent": "Robert Baratheon",
+    "children": ["Joffrey Baratheon", "Tommen Baratheon", "Myrcella Baratheon"]
+  },
+  {
+    "parent": "Cersei Lannister",
+    "children": ["Joffrey Baratheon", "Tommen Baratheon", "Myrcella Baratheon"]
+  },
+  {
+    "parent": "Ned Stark",
+    "children": ["Robb Stark", "Sansa Stark"]
+  },
+  {
+    "parent": "Catelyn Stark",
+    "children": ["Robb Stark", "Sansa Stark"]
+  }
+]

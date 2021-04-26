@@ -1,0 +1,20 @@
+[
+  {
+    "customer_code": "ASWD001",
+    "customer_name": "Sheldon Cooper",
+    "customer_email": "sheldon@tbbt.com",
+    "customer_ph_no": 9876543210
+  },
+  {
+    "customer_code": "ASWD002",
+    "customer_name": "Leonard Hofstadter",
+    "customer_email": "leonard@tbbt.com",
+    "customer_ph_no": 9876543211
+  },
+  {
+    "customer_code": "ASWD003",
+    "customer_name": "Rajesh Koothrapalli",
+    "customer_email": "rajesh@tbbt.com",
+    "customer_ph_no": 9876543213
+  }
+]

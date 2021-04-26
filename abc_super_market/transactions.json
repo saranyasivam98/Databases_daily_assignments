@@ -1,0 +1,72 @@
+[
+  {
+    "trans_id": "01032021_2159_001",
+    "customer_details": "ASWD001",
+    "staff_details": "AS7890TG77",
+    "branch_details": "tup02",
+    "trans_date": "2021-03-01"
+  },
+  {
+    "trans_id": "02032021_2203_001",
+    "customer_details": "ASWD002",
+    "staff_details": "AS7890TW35",
+    "branch_details": "tup03",
+    "trans_date": "2021-03-02"
+  },
+  {
+    "trans_id": "03032021_2203_002",
+    "customer_details": "ASWD003",
+    "staff_details": "AS7890TD67",
+    "branch_details": "tup04",
+    "trans_date": "2021-03-03"
+  },
+  {
+    "trans_id": "04032021_2205_001",
+    "customer_details": "ASWD001",
+    "staff_details": "AS7890TW35",
+    "branch_details": "tup03",
+    "trans_date": "2021-03-04"
+  },
+  {
+    "trans_id": "05032021_2207_001",
+    "customer_details": "ASWD002",
+    "staff_details": "AS7890TG77",
+    "branch_details": "tup02",
+    "trans_date": "2021-03-05"
+  },
+  {
+    "trans_id": "06032021_2210_001",
+    "customer_details": "ASWD003",
+    "staff_details": "AS7890TD67",
+    "branch_details": "tup04",
+    "trans_date": "2021-03-06"
+  },
+  {
+    "trans_id": "07032021_2210_002",
+    "customer_details": "ASWD001",
+    "staff_details": "AS7890TS10",
+    "branch_details": "cbe02",
+    "trans_date": "2021-03-07"
+  },
+  {
+    "trans_id": "08032021_2212_001",
+    "customer_details": "ASWD002",
+    "staff_details": "AS7890TG98",
+    "branch_details": "cbe03",
+    "trans_date": "2021-03-08"
+  },
+  {
+    "trans_id": "09032021_2215_001",
+    "customer_details": "ASWD003",
+    "staff_details": "AS7890TG98",
+    "branch_details": "cbe03",
+    "trans_date": "2021-03-09"
+  },
+  {
+    "trans_id": "10032021_2217_001",
+    "customer_details": "ASWD001",
+    "staff_details": "AS7890TG98",
+    "branch_details": "cbe03",
+    "trans_date": "2021-03-10"
+  }
+]
