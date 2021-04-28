@@ -63,12 +63,12 @@ df1 = pd.read_csv("compressor_models.csv")
 for index, row in df1.iterrows():
     v1 = Values()
 
-    v1.model_id = row['model']
+    v1.model_id = "HLH061T4"
     v1.power = row['power']
     v1.cond_temp = row['condenser_temp']
     v1.evap_temp = row['evaporator_temp']
     specs_object = session.query(Specifications).filter_by(model=v1.model_id).first()
-    v1.specs = specs_object
+    # v1.specs = specs_object
 
     session.add(v1)
 

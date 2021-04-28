@@ -61,7 +61,7 @@ class Branch(Base):
 class Transaction(Base):
     __tablename__ = 'transaction'
 
-    trans_id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     trans_code = Column(VARCHAR(25), unique=True)
     trans_date = Column(DATETIME)
     branch_id = Column(INTEGER, ForeignKey("branch.id"))
@@ -78,6 +78,30 @@ class Transaction(Base):
         self.customer_id = customer_details
         self.staff_id = staff_details
         self.branch_id = branch_details'''
+
+
+class Product(Base):
+    __tablename__ = 'products'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    product_name = Column(VARCHAR(25), unique=True)
+    product_quantity = Column(INTEGER)
+
+    def __init__(self, product_name, product_quantity):
+        self.product_quantity = product_quantity
+        self.product_name = product_name
+
+
+class Purchase(Base):
+    __tablename__ = 'purchase'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    purchase_code = Column(VARCHAR(25))
+    transaction_id = Column(INTEGER, ForeignKey("transaction.id"))
+    product_id = Column(INTEGER, ForeignKey("products.id"))
+
+    transaction = relationship("Transaction", backref='purchase')
+    product = relationship("Product", backref='purchase')
 
 
 def get_branch_data(path):
@@ -104,6 +128,14 @@ def get_staff_data(path):
         yield Staff(data['staff_id'], data['staff_name'], data['staff_email'], data['staff_ph_no'])
 
 
+def get_product_data(path):
+    with open(path) as file:
+        staff_data = json.load(file)
+
+    for data in staff_data:
+        yield Product(data['product_name'], data['product_quantity'])
+
+
 def main():
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/students"
     engine = create_engine(conn, echo=True)
@@ -115,7 +147,8 @@ def main():
 
     '''session.bulk_save_objects(get_branch_data("abc_super_market/branch.json"))
     session.bulk_save_objects(get_staff_data("abc_super_market/staff.json"))
-    session.bulk_save_objects(get_customer_data("abc_super_market/customers.json"))'''
+    session.bulk_save_objects(get_customer_data("abc_super_market/customers.json"))
+    session.bulk_save_objects(get_product_data("abc_super_market/products.json"))
 
     session.commit()
 
@@ -127,19 +160,40 @@ def main():
                           # data['branch_details'])
         obj.trans_code = data['trans_id']
         obj.trans_date = data['trans_date']
-        obj.customer_id = data['customer_details']
-        obj.staff_id = data['staff_details']
-        obj.branch_id = data['branch_details']
 
-        # branch_obj = session.query(Branch).filter_by(branch_code=obj.branch_id).one()
-        # obj.branch = branch_obj
+        branch_obj = session.query(Branch).filter_by(branch_code=data['branch_details']).one()
+        obj.branch = branch_obj
+
+        customer_obj = session.query(Customer).filter_by(customer_code=data['customer_details']).one()
+        obj.customer = customer_obj
+
+        staff_obj = session.query(Staff).filter_by(staff_code=data['staff_details']).one()
+        obj.staff = staff_obj
+
+        session.add(obj)
+
+    session.commit()'''
+
+    with open("sample.json") as file:
+        purchases = json.load(file)
+
+    print(purchases)
+
+    for purchase in purchases:
+        obj = Purchase()
+
+        obj.purchase_code = purchase['purchase_id']
+
+        transaction_obj = session.query(Transaction).filter_by(trans_code=purchase['trans_details']).one()
+        obj.transaction = transaction_obj
+
+        product_obj = session.query(Product).filter_by(product_name=purchase['product_details']).one()
+        obj.product = product_obj
 
         session.add(obj)
 
     session.commit()
 
-    test_obj = session.query(Transaction).filter_by(id=1)
-    print(test_obj.branch.branch_id)
 
 if __name__ == '__main__':
     main()

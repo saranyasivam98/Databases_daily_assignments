@@ -42,8 +42,6 @@ Base.metadata.create_all(engine)
 df = pd.read_excel("parent.xlsx")
 df1 = pd.read_excel("child.xlsx")
 
-with open("parent_child.json") as file:
-    connection_data = json.load(file)
 
 Session = sessionmaker(bind=engine)
 session = Session()
