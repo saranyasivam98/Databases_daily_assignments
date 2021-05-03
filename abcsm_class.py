@@ -1,3 +1,8 @@
+# -- coding: UTF-8 --
+"""
+Build a database for the ABC super market assignment
+"""
+
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR,  BIGINT, DATETIME
@@ -8,16 +13,22 @@ from sqlalchemy.orm import sessionmaker
 
 import pandas as pd
 import json
+import logging
 
 Base = declarative_base()
+
+__author__ = 'saranya@gyandata.com'
+
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
 
 
 class Staff(Base):
     __tablename__ = 'staff'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    staff_code = Column(VARCHAR(10), primary_key=True)
-    staff_name = Column(VARCHAR(50), unique=True, index=True)
+    staff_code = Column(VARCHAR(10), unique=True)
+    staff_name = Column(VARCHAR(50), index=True)
     staff_email = Column(VARCHAR(50), unique=True)
     staff_ph_no = Column(BIGINT, unique=True)
 
@@ -27,13 +38,17 @@ class Staff(Base):
         self.staff_email = staff_email
         self.staff_ph_no = staff_ph_no
 
+    def __str__(self):
+        return f"<Staff Code:{self.staff_code}, Name:{self.staff_name}, Email:{self.staff_email}, " \
+               f"Phone Number:{self.staff_ph_no}>"
+
 
 class Customer(Base):
     __tablename__ = 'customer'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    customer_code = Column(VARCHAR(10), primary_key=True)
-    customer_name = Column(VARCHAR(50), unique=True, index=True)
+    customer_code = Column(VARCHAR(10), unique=True)
+    customer_name = Column(VARCHAR(50), index=True)
     customer_email = Column(VARCHAR(50), unique=True)
     customer_ph_no = Column(BIGINT, unique=True)
 
@@ -43,12 +58,16 @@ class Customer(Base):
         self.customer_email = customer_email
         self.customer_ph_no = customer_ph_no
 
+    def __str__(self):
+        return f"<Customer Code:{self.customer_code}, Name:{self.customer_name}, Email:{self.customer_email}, " \
+               f"Phone Number:{self.customer_ph_no}>"
+
 
 class Branch(Base):
     __tablename__ = 'branch'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    branch_code = Column(VARCHAR(15), unique=True, primary_key=True)
+    branch_code = Column(VARCHAR(15), unique=True)
     branch_address = Column(VARCHAR(150))
     branch_ph_no = Column(BIGINT, unique=True)
 
@@ -56,6 +75,10 @@ class Branch(Base):
         self.branch_code = branch_code
         self.branch_address = branch_address
         self.branch_ph_no = branch_ph_no
+
+    def __str__(self):
+        return f"<Branch Code:{self.branch_code}, Email:{self.branch_email}, " \
+           f"Phone Number:{self.branch_ph_no}>"
 
 
 class Transaction(Base):
@@ -72,12 +95,9 @@ class Transaction(Base):
     staff = relationship("Staff", backref='transactions')
     customer = relationship("Customer", backref='transactions')
 
-    '''def __init__(self, trans_code, trans_date, customer_details, staff_details, branch_details):
-        self.trans_code = trans_code
-        self.trans_date = trans_date
-        self.customer_id = customer_details
-        self.staff_id = staff_details
-        self.branch_id = branch_details'''
+    def __str__(self):
+        return f"<Transaction Code: {self.trans_code}, Date:{self.trans_date}, Branch: {self.branch_id}, " \
+               f"Customer: {self.customer_id}, Staff: {self.staff_id}>"
 
 
 class Product(Base):
@@ -91,6 +111,9 @@ class Product(Base):
         self.product_quantity = product_quantity
         self.product_name = product_name
 
+    def __str__(self):
+        return f"Product Name: {self.product_name}, Quantity: {self.product_quantity}"
+
 
 class Purchase(Base):
     __tablename__ = 'purchase'
@@ -102,6 +125,9 @@ class Purchase(Base):
 
     transaction = relationship("Transaction", backref='purchase')
     product = relationship("Product", backref='purchase')
+
+    def __str__(self):
+        return f"Purchase Code: {self.purchase_code}, Transaction: {self.transaction_id}, Product: {self.product_id}"
 
 
 def get_branch_data(path):
@@ -136,8 +162,56 @@ def get_product_data(path):
         yield Product(data['product_name'], data['product_quantity'])
 
 
+def add_transaction(session):
+    try:
+        with open("abc_super_market/transactions.json") as file:
+            transactions = json.load(file)
+        for data in transactions:
+            obj = Transaction()
+            obj.trans_code = data['trans_id']
+            obj.trans_date = data['trans_date']
+
+            branch_obj = session.query(Branch).filter_by(branch_code=data['branch_details']).one()
+            obj.branch = branch_obj
+
+            customer_obj = session.query(Customer).filter_by(customer_code=data['customer_details']).one()
+            obj.customer = customer_obj
+
+            staff_obj = session.query(Staff).filter_by(staff_code=data['staff_details']).one()
+            obj.staff = staff_obj
+
+            session.add(obj)
+    except:
+        session.rollback()
+    else:
+        session.commit()
+
+
+def add_purchase(session):
+    try:
+        with open("sample.json") as file:
+            purchases = json.load(file)
+
+        for purchase in purchases:
+            obj = Purchase()
+
+            obj.purchase_code = purchase['purchase_id']
+
+            transaction_obj = session.query(Transaction).filter_by(trans_code=purchase['trans_details']).one()
+            obj.transaction = transaction_obj
+
+            product_obj = session.query(Product).filter_by(product_name=purchase['product_details']).one()
+            obj.product = product_obj
+
+            session.add(obj)
+    except:
+        session.rollback()
+    else:
+        session.commit()
+
+
 def main():
-    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/students"
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
     engine = create_engine(conn, echo=True)
 
     Base.metadata.create_all(engine)
@@ -145,54 +219,15 @@ def main():
     Session = sessionmaker(bind=engine, autoflush=False)
     session = Session()
 
-    '''session.bulk_save_objects(get_branch_data("abc_super_market/branch.json"))
+    session.bulk_save_objects(get_branch_data("abc_super_market/branch.json"))
     session.bulk_save_objects(get_staff_data("abc_super_market/staff.json"))
     session.bulk_save_objects(get_customer_data("abc_super_market/customers.json"))
     session.bulk_save_objects(get_product_data("abc_super_market/products.json"))
 
-    session.commit()
+    session.commit() # new session for a transaction
 
-    with open("abc_super_market/transactions.json") as file:
-        transactions = json.load(file)
-
-    for data in transactions:
-        obj = Transaction()        #data['trans_id'], data['trans_date'], data['customer_details'], data['staff_details'],
-                          # data['branch_details'])
-        obj.trans_code = data['trans_id']
-        obj.trans_date = data['trans_date']
-
-        branch_obj = session.query(Branch).filter_by(branch_code=data['branch_details']).one()
-        obj.branch = branch_obj
-
-        customer_obj = session.query(Customer).filter_by(customer_code=data['customer_details']).one()
-        obj.customer = customer_obj
-
-        staff_obj = session.query(Staff).filter_by(staff_code=data['staff_details']).one()
-        obj.staff = staff_obj
-
-        session.add(obj)
-
-    session.commit()'''
-
-    with open("sample.json") as file:
-        purchases = json.load(file)
-
-    print(purchases)
-
-    for purchase in purchases:
-        obj = Purchase()
-
-        obj.purchase_code = purchase['purchase_id']
-
-        transaction_obj = session.query(Transaction).filter_by(trans_code=purchase['trans_details']).one()
-        obj.transaction = transaction_obj
-
-        product_obj = session.query(Product).filter_by(product_name=purchase['product_details']).one()
-        obj.product = product_obj
-
-        session.add(obj)
-
-    session.commit()
+    add_transaction(session)
+    add_purchase(session)
 
 
 if __name__ == '__main__':

@@ -1,3 +1,9 @@
+# -- coding: UTF-8 --
+"""
+Many to One relationship explained
+"""
+
+import logging
 from sqlalchemy import Table, Column, ForeignKey
 from sqlalchemy.dialects.mysql import DATETIME, INTEGER, VARCHAR, FLOAT
 from sqlalchemy.orm import relationship
@@ -11,11 +17,12 @@ import pandas as pd
 
 Base = declarative_base()
 
+__author__ = 'saranya@gyandata.com'
 
-# new repo in github
-# index, views, sequences, triggers
-# name should be unique
-# primary key should be id
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
+
+
 class Series(Base):
     __tablename__ = 'series'
     id = Column(INTEGER, primary_key=True, autoincrement=True)
