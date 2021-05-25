@@ -48,22 +48,22 @@ def most_transaction_branch(session):
 
 def main():
     setup_logging()
+    # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
-    engine = create_engine(conn, echo=True)
+    engine = create_engine(conn)
 
-    Session = sessionmaker(bind=engine, autoflush=False)
-    session = Session()
+    # Creating the session
+    session_factory = sessionmaker(bind=engine)
+    session = session_factory()
 
     # Querying for products with quantity less then 500
-    # update_stock(session)
+    update_stock(session)
 
     # Query for displaying the name of the staff who sold most no of products.
-    # staff_most_products(session)
+    staff_most_products(session)
 
-    # Query for displaying thr address of the branch with most no of transactions.
+    # Query for displaying the address of the branch with most no of transactions.
     most_transaction_branch(session)
-
-
 
 
 if __name__ == '__main__':

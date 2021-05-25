@@ -13,8 +13,8 @@ import pandas as pd
 Base = declarative_base()
 
 association_table = Table('association', Base.metadata,
-                          Column('parent_id', INTEGER, ForeignKey('parent.parent_id')),
-                          Column('child_id', INTEGER, ForeignKey('child.child_id')))
+                          Column('parent_id', INTEGER, ForeignKey('parent.parent_id', ondelete="CASCADE")),
+                          Column('child_id', INTEGER, ForeignKey('child.child_id', ondelete="CASCADE")))
 
 
 class Parent(Base):
@@ -23,15 +23,26 @@ class Parent(Base):
     name = Column(VARCHAR(50))
     family = Column(VARCHAR(50))
 
+    children = relationship(
+        "Child",
+        secondary=association_table,
+        back_populates="parents",
+        cascade="all, delete"
+    )
+
 
 class Child(Base):
     __tablename__ = 'child'
     child_id = Column(INTEGER, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(50))
     residence = Column(VARCHAR(50))
-    parent_id = Column(INTEGER, ForeignKey("parent.parent_id"))
 
-    parent = relationship("Parent", secondary=association_table, backref=backref("children", cascade='all, delete'))
+    parents = relationship(
+        "Parent",
+        secondary=association_table,
+        back_populates="children",
+        passive_deletes=False
+    )
 
 
 def add_parent(session, df):
@@ -55,9 +66,9 @@ def add_child(session, df):
             c1.name = row['child_name']
             c1.residence = row['Residence']
             father_obj = session.query(Parent).filter_by(name=row['father_name']).first()
-            c1.parent.append(father_obj)
+            c1.parents.append(father_obj)
             mother_obj = session.query(Parent).filter_by(name=row['mother_name']).first()
-            c1.parent.append(mother_obj)
+            c1.parents.append(mother_obj)
             session.add(c1)
     except:
         session.rollback()

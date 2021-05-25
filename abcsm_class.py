@@ -211,20 +211,24 @@ def add_purchase(session):
 
 
 def main():
+    # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
     engine = create_engine(conn, echo=True)
 
+    # Creating the tables in the DB
     Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine, autoflush=False)
-    session = Session()
+    # Creating the session
+    session_factory = sessionmaker(bind=engine)
+    session = session_factory()
 
+    # Adding Branch, Staff, Customer, Products data
     session.bulk_save_objects(get_branch_data("abc_super_market/branch.json"))
     session.bulk_save_objects(get_staff_data("abc_super_market/staff.json"))
     session.bulk_save_objects(get_customer_data("abc_super_market/customers.json"))
     session.bulk_save_objects(get_product_data("abc_super_market/products.json"))
 
-    session.commit() # new session for a transaction
+    session.commit()
 
     add_transaction(session)
     add_purchase(session)

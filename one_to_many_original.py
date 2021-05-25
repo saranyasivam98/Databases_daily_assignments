@@ -3,15 +3,17 @@
 One to Many relationship explained
 """
 import logging
-from sqlalchemy import Table, Column, Integer, ForeignKey, String, Float
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, ForeignKey
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, FLOAT
 from sqlalchemy.ext.declarative import declarative_base
 
-from sqlalchemy import create_engine, MetaData
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 import pandas as pd
+
+from helpers import setup_logging
 
 Base = declarative_base()
 
@@ -21,7 +23,6 @@ LOGGER = logging.getLogger(__name__)
 LOGGER_CONFIG_PATH = 'config/logging.json'
 
 
-# Not Null
 class Specifications(Base):
     __tablename__ = 'specifications'
 
@@ -41,11 +42,11 @@ class Values(Base):
     cond_temp = Column(INTEGER)
     power = Column(FLOAT)
 
-    specs = relationship("Specifications", backref="values")
+    specs = relationship("Specifications", backref="values", cascade='all, delete')
+    # specs = relationship("Specifications", backref=backref("values", cascade='all, delete'))
 
 
-def add_specs(session):
-    df = pd.read_excel("specs.xlsx")
+def add_specs(session, df):
 
     try:
         for index, row in df.iterrows():
@@ -63,11 +64,10 @@ def add_specs(session):
         session.commit()
 
 
-def add_values(session):
-    df1 = pd.read_csv("compressor_models.csv")
+def add_values(session, df):
 
     try:
-        for index, row in df1.iterrows():
+        for index, row in df.iterrows():
             v1 = Values()
 
             v1.model_id = row['model']
@@ -88,19 +88,36 @@ def add_values(session):
 
 
 def main():
-    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
+    # setup_logging()
+
+    # Creating engine
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost:3306/learning"
     engine = create_engine(conn, echo=True)
 
+    with engine.connect() as conn:
+        conn.execute("DROP TABLE learning.values")
+        conn.execute("DROP TABLE learning.specifications")
+
+    # Creating the tables in the DB
     Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine, autoflush=False)
-    session = Session()
+    df1 = pd.read_csv("compressor_models.csv")
+    df = pd.read_excel("specs.xlsx")
 
-    add_specs(session)
-    add_values(session)
+    # Creating the session
+    session_factory = sessionmaker(bind=engine, autoflush=False)
+    session = session_factory()
 
-    obj = session.query(Specifications).filter_by(id=1).one()
-    print(obj.values)
+    # Adding values in the DB
+    add_specs(session, df)
+    add_values(session, df1)
+
+    # If parent object(Specifications) is deleted, then all the children(Values) are also deleted
+    '''obj = session.query(Specifications).filter_by(id=6).one()
+    session.delete(obj)
+    session.commit()'''
+
+    obj = Specifications('changed', )
 
 
 if __name__ == '__main__':
