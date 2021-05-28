@@ -1,23 +1,19 @@
 # -- coding: UTF-8 --
 """
+==============
+Create engine
+==============
 Exploring different options in create_engine()
 """
 import logging
-from sqlalchemy import Column, text
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, FLOAT
+from sqlalchemy import Column, create_engine, text
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.pool import NullPool, AssertionPool, StaticPool
 from sqlalchemy.orm import sessionmaker
-from performance import Values
 
 import pandas as pd
 
-from sqlalchemy import create_engine
-
 Base = declarative_base()
-
-# state innoDB explicitly
-# dont rely on default options
 
 __author__ = 'saranya@gyandata.com'
 
@@ -29,17 +25,20 @@ class Specifications(Base):
     """
     To store the properties of compressor
 
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
     :ivar model: Model of the compressor
-    :vartype model: str
+    :vartype model: :class:`sqlalchemy.dialects.mysql.VARCHAR`
 
     :ivar technology: Technology of the motor
-    :vartype technology: str
+    :vartype technology: :class:`sqlalchemy.dialects.mysql.VARCHAR`
 
     :ivar refrigerant: Refrigerant used in the compressor
-    :vartype refrigerant: str
+    :vartype refrigerant: :class:`sqlalchemy.dialects.mysql.VARCHAR`
 
     :ivar capacity_control: Speed control of the compressor
-    :vartype capacity_control: str
+    :vartype capacity_control: :class:`sqlalchemy.dialects.mysql.VARCHAR`
     """
     __tablename__ = 'specifications'
 
@@ -49,11 +48,11 @@ class Specifications(Base):
     refrigerant = Column(VARCHAR(10))
     technology = Column(VARCHAR(15))
 
-    def __init__(self, model, cc, ref, tech):
+    def __init__(self, model, cap, ref, tech):
         self.model = model
         self.technology = tech
         self.refrigerant = ref
-        self.capacity_control = cc
+        self.capacity_control = cap
 
 
 def get_engine(conn_str, engine_options):
@@ -133,9 +132,9 @@ def add_specs(session):
     df = pd.read_excel("specs.xlsx")
 
     try:
-        for index, row in df.iterrows():
-            c1 = Specifications(row['Model'], row['Technology'], row['Refrigerant'], row['Capacity_control'])
-            session.add(c1)
+        for _, row in df.iterrows():
+            specs = Specifications(row['Model'], row['Technology'], row['Refrigerant'], row['Capacity_control'])
+            session.add(specs)
     except Exception as ex:
         session.rollback()
         raise ex
@@ -174,12 +173,14 @@ def main():
     add_specs(session)
 
     # Case sensitive
-    '''with engine.connect() as connection:
-        results = connection.execute(text("SELECT Refrigerant FROM learning.specifications"))'''
+    with engine.connect() as connection:
+        results = connection.execute(text("SELECT Refrigerant FROM learning.specifications"))
+
+    print(results)
 
     # Hide parameters
-    '''session.add(Specifications("one_u", "two", "three", "four"))
-    session.commit()'''
+    session.add(Specifications("one_u", "two", "three", "four"))
+    session.commit()
 
 
 if __name__ == '__main__':

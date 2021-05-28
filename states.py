@@ -3,11 +3,9 @@
 Different Transaction states
 """
 import logging
-from sqlalchemy import Column, inspect
+from sqlalchemy import Column, inspect, create_engine
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
-
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 from helpers import setup_logging
@@ -44,14 +42,12 @@ class Specifications(Base):
     refrigerant = Column(VARCHAR(10))
     technology = Column(VARCHAR(15))
 
-    def __init__(self, model, cc, ref, tech):
+    def __init__(self, model, cap, ref, tech):
         self.model = model
         self.technology = tech
         self.refrigerant = ref
-        self.capacity_control = cc
+        self.capacity_control = cap
 
-
-# What exactly does rollback()
 
 def add_in_transaction(session):
     """
@@ -67,24 +63,21 @@ def add_in_transaction(session):
             LOGGER.info("___________Transient to Pending to Persistent____________")
             obj = Specifications(str(i), 'Variable Speed', 'R407B', 'Reciprocating')
             insp = inspect(obj)
-            LOGGER.info("After creating the object, its state is Transient: %s" % insp.transient)
+            LOGGER.info("After creating the object, its state is Transient: %s", insp.transient)
 
             session.add(obj)
-            LOGGER.info("After adding the object to the session, its state is Pending: %s" % insp.pending)
+            LOGGER.info("After adding the object to the session, its state is Pending: %s", insp.pending)
 
             if i == 3:
                 raise RuntimeError()
-            LOGGER.info("After flushing the state is Pending:%s" % insp.pending)
+            LOGGER.info("After flushing the state is Pending:%s", insp.pending)
 
             session.commit()
-            LOGGER.info("After its committed, its state is Persistent: %s" % insp.persistent)
+            LOGGER.info("After its committed, its state is Persistent: %s", insp.persistent)
 
         except Exception as ex:
             session.rollback()
-            continue
-
-# verify rollback()
-# yield data: orm, rawsql
+            raise ex
 
 
 def delete_in_transaction(session):
@@ -98,13 +91,13 @@ def delete_in_transaction(session):
     """
     LOGGER.info("_________Persistent to Deleted to Detached____________")
     obj = session.query(Specifications).filter(Specifications.model == 'MTZO64-2').one()
-    LOGGER.info("Object state when queried from Db is Persistent: %s" % inspect(obj).persistent)
+    LOGGER.info("Object state when queried from Db is Persistent: %s", inspect(obj).persistent)
     session.delete(obj)
     session.flush()
-    LOGGER.info("Object state after flush is Deleted: %s" % inspect(obj).deleted)
+    LOGGER.info("Object state after flush is Deleted: %s", inspect(obj).deleted)
 
     session.commit()
-    LOGGER.info("Deleted object after committing has state Detached: %s" % inspect(obj).detached)
+    LOGGER.info("Deleted object after committing has state Detached: %s", inspect(obj).detached)
 
 
 def pending_to_transient(session):
@@ -119,13 +112,13 @@ def pending_to_transient(session):
     LOGGER.info("_____________Pending to Transient________________")
     obj = Specifications('MTZO64-A', 'Variable Speed', 'R407B', 'Reciprocating')
     insp = inspect(obj)
-    LOGGER.info("After creating the object, its state is Transient: %s" % insp.transient)
+    LOGGER.info("After creating the object, its state is Transient: %s", insp.transient)
 
     session.add(obj)
-    LOGGER.info("After adding the object to the session, its state is Pending: %s" % insp.pending)
+    LOGGER.info("After adding the object to the session, its state is Pending: %s", insp.pending)
 
     session.rollback()
-    LOGGER.info("After rollback, the state is Transient: %s" % insp.transient)
+    LOGGER.info("After rollback, the state is Transient: %s", insp.transient)
 
 
 def persistent_to_transient(session):
@@ -140,16 +133,16 @@ def persistent_to_transient(session):
     LOGGER.info("___________Persistent to Transient____________")
     obj = Specifications('MTZO64-B', 'Variable Speed', 'R407B', 'Reciprocating')
     insp = inspect(obj)
-    LOGGER.info("After creating the object, its state is Transient: %s" % insp.transient)
+    LOGGER.info("After creating the object, its state is Transient: %s", insp.transient)
 
     session.add(obj)
-    LOGGER.info("After adding the object to the session, its state is Pending: %s" % insp.pending)
+    LOGGER.info("After adding the object to the session, its state is Pending: %s", insp.pending)
 
     session.flush()
-    LOGGER.info("After its flushed, its state is Persistent: %s" % insp.persistent)
+    LOGGER.info("After its flushed, its state is Persistent: %s", insp.persistent)
 
     session.rollback()
-    LOGGER.info("After rolling back from flush, its state is Transient: %s" % insp.transient)
+    LOGGER.info("After rolling back from flush, its state is Transient: %s", insp.transient)
 
 
 def persistent_to_detached(session):
@@ -163,11 +156,11 @@ def persistent_to_detached(session):
     """
     LOGGER.info("___________Persistent to Detached_______________")
     obj = session.query(Specifications).filter(Specifications.model == 'MTZO64-2').one()
-    LOGGER.info("Object queried from Db had state persistent when loaded: %s" % inspect(obj).persistent)
+    LOGGER.info("Object queried from Db had state persistent when loaded: %s", inspect(obj).persistent)
     session.delete(obj)
 
     session.commit()
-    LOGGER.info("Deleted object after committing has state Detached: %s" % inspect(obj).detached)
+    LOGGER.info("Deleted object after committing has state Detached: %s", inspect(obj).detached)
 
 
 def deleted_to_persistent(session):
@@ -181,13 +174,13 @@ def deleted_to_persistent(session):
     """
     LOGGER.info("_________Deleted to Persistent____________")
     obj = session.query(Specifications).filter(Specifications.model == 'MTZO64-2').one()
-    LOGGER.info("Object state when queried from Db is Persistent: %s" % inspect(obj).persistent)
+    LOGGER.info("Object state when queried from Db is Persistent: %s", inspect(obj).persistent)
     session.delete(obj)
     session.flush()
-    LOGGER.info("Object state after flush is Deleted: %s" % inspect(obj).deleted)
+    LOGGER.info("Object state after flush is Deleted: %s", inspect(obj).deleted)
 
     session.rollback()
-    LOGGER.info("Flushed object after rollback has state Persistent: %s" % inspect(obj).persistent)
+    LOGGER.info("Flushed object after rollback has state Persistent: %s", inspect(obj).persistent)
 
 
 def detached_to_persistent(session):
@@ -201,16 +194,16 @@ def detached_to_persistent(session):
     """
     LOGGER.info("____________Detached to Persistent____________")
     obj = session.query(Specifications).filter(Specifications.model == 'MTZO64-2').one()
-    LOGGER.info("Object state when queried from Db is Persistent: %s" % inspect(obj).persistent)
+    LOGGER.info("Object state when queried from Db is Persistent: %s", inspect(obj).persistent)
     session.delete(obj)
     session.flush()
-    LOGGER.info("Object state after flush is Deleted: %s" % inspect(obj).deleted)
+    LOGGER.info("Object state after flush is Deleted: %s", inspect(obj).deleted)
 
     session.commit()
-    LOGGER.info("Deleted object after committing has state Detached: %s" % inspect(obj).detached)
+    LOGGER.info("Deleted object after committing has state Detached: %s", inspect(obj).detached)
 
     session.add(obj)
-    LOGGER.info("After adding the obj using session.add it state is Persistent: %s" % inspect(obj).persistent)
+    LOGGER.info("After adding the obj using session.add it state is Persistent: %s", inspect(obj).persistent)
     
 
 def main():
@@ -234,10 +227,8 @@ def main():
     # deleted_to_persistent(session)
     # detached_to_persistent(session)
 
-    '''
     obj = session.query(Specifications).filter_by(id=1).one()
     LOGGER.info(obj.id)
-    '''
 
 
 if __name__ == '__main__':

@@ -1,12 +1,14 @@
+# -- coding: UTF-8 --
+"""
+Explaining many to many relationships
+"""
 from sqlalchemy import Table, Column, ForeignKey
-from sqlalchemy.orm import relationship, backref
-from sqlalchemy.dialects.mysql import DATETIME, INTEGER, VARCHAR, FLOAT
+from sqlalchemy.orm import relationship
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-import json
 
 import pandas as pd
 
@@ -18,6 +20,18 @@ association_table = Table('association', Base.metadata,
 
 
 class Parent(Base):
+    """
+    To store details of parent
+
+    :ivar parent_id: Primary key of the table
+    :vartype parent_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar name: Nam eof the parent
+    :vartype name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar family: Name of the family
+    :vartype family: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
     __tablename__ = 'parent'
     parent_id = Column(INTEGER, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(50))
@@ -27,11 +41,24 @@ class Parent(Base):
         "Child",
         secondary=association_table,
         back_populates="parents",
-        cascade="all, delete"
+        cascade="all, delete",
+        passive_deletes=True
     )
 
 
 class Child(Base):
+    """
+    To store details of child
+
+    :ivar child_id: Primary key of the table
+    :vartype child_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar name: Nam eof the parent
+    :vartype name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar residence: Name of the residence
+    :vartype residence: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
     __tablename__ = 'child'
     child_id = Column(INTEGER, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(50))
@@ -40,44 +67,67 @@ class Child(Base):
     parents = relationship(
         "Parent",
         secondary=association_table,
-        back_populates="children",
-        passive_deletes=False
+        back_populates="children"
+        # passive_deletes=True
     )
 
 
 def add_parent(session, df):
+    """
+    To add parents to database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
     try:
-        for index, row in df.iterrows():
-            p1 = Parent()
-            p1.name = row['parent_name']
-            p1.family = row['family']
-            session.add(p1)
-    except:
+        for _, row in df.iterrows():
+            parent = Parent()
+            parent.name = row['parent_name']
+            parent.family = row['family']
+            session.add(parent)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
 
 def add_child(session, df):
+    """
+    To add child to database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
     try:
-        for index, row in df.iterrows():
-            c1 = Child()
-            c1.name = row['child_name']
-            c1.residence = row['Residence']
+        for _, row in df.iterrows():
+            child = Child()
+            child.name = row['child_name']
+            child.residence = row['Residence']
             father_obj = session.query(Parent).filter_by(name=row['father_name']).first()
-            c1.parents.append(father_obj)
+            child.parents.append(father_obj)
             mother_obj = session.query(Parent).filter_by(name=row['mother_name']).first()
-            c1.parents.append(mother_obj)
-            session.add(c1)
-    except:
+            child.parents.append(mother_obj)
+            session.add(child)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
 
 def main():
+    """Main Function"""
     # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
     engine = create_engine(conn, echo=True)
@@ -101,7 +151,7 @@ def main():
     add_parent(session, df)
     add_child(session, df1)
 
-    obj = session.query(Parent).filter(Parent.parent_id == 1).one()
+    obj = session.query(Child).filter(Child.child_id == 1).one()
     session.delete(obj)
     session.commit()
 

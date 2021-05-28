@@ -5,7 +5,7 @@ To build a hospital database
 
 import logging
 from sqlalchemy import Column, ForeignKey, create_engine
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, TINYTEXT, TEXT, JSON, DATETIME, FLOAT, BIGINT, DATE
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, TINYTEXT, FLOAT, BIGINT, DATE
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, backref, sessionmaker
 
@@ -123,71 +123,52 @@ class Tablet(Base):
         self.price = price
 
 
-'''  
-class LabReport(Base):
-    __tablename__ = 'labreport'
-
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    lab_id = Column(INTEGER, ForeignKey("lab.id"))
-    test_sample_id = Column(INTEGER, ForeignKey("testsample.id"))
-    doctor_id = Column(INTEGER, ForeignKey("doctor.id"))
-    patient_id = Column(INTEGER, ForeignKey("patient.id"))
-    diagnosis_id = Column(INTEGER, ForeignKey("diagnosis.id"))
-    payment_id = Column(INTEGER, ForeignKey("test_payment.id"))
-    result = Column(JSON)
-
-    doctor = relationship("Doctor", backref='labreport')
-    diagnosis = relationship("Diagnosis", backref='labreport')
-    patient = relationship("Patient", backref='labreport')
-    lab = relationship("Doctor", backref='labreport')
-    test_sample = relationship("TestSample", backref='labreport')
-    payment = relationship("TestPayment")
-
-
-class TestPayment(PaymentMixin, Base):
-    __tablename__ = 'test_payment'
-
-    appointment_id = Column(INTEGER, ForeignKey("appointment.id"))
-'''
-
-
-class Lab(Base):
-    __tablename__ = 'lab'
-
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    lab_name = Column(VARCHAR(50))
-    description = Column(TINYTEXT)
-
-
-class TestSample(Base):
-    __tablename__ = 'testsample'
-
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
-    sample = Column(VARCHAR(50))
-
-
 def add_doctor_data(session):
+    """
+    To add doctor into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/doctors.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         session.add(Doctor(data['name'], data['dept'], data['ph_no']))
 
     session.commit()
 
 
 def add_patient_data(session):
+    """
+    To add patient into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/patients.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         session.add(Patient(data['name'], data['address'], data['ph_no']))
 
     session.commit()
 
 
 def add_appointment_data(session):
+    """
+    To add appointment into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/appointments.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = Appointment(data['doctor_id'], data['patient_id'], data['appointment_datetime'])
         patient_obj = session.query(Patient).filter_by(id=data['patient_id']).one()
         obj.patient = patient_obj
@@ -201,9 +182,17 @@ def add_appointment_data(session):
 
 
 def add_consultation_payment(session):
+    """
+    To add consultation into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/consultation_payment.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = ConsultationPayment()
         obj.payment = data['payment']
         obj.date = data['date']
@@ -216,9 +205,17 @@ def add_consultation_payment(session):
 
 
 def add_diagnosis_data(session):
+    """
+    To add diagnosis into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/diagnosis.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = Diagnosis()
         obj.patient_id = data['patient_id']
         obj.doctor_id = data['doctor_id']
@@ -236,9 +233,17 @@ def add_diagnosis_data(session):
 
 
 def add_tablets_data(session):
+    """
+    To add tablets into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/tablets.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = Tablet(data['name'], data['stock'], data['price'])
         session.add(obj)
 
@@ -246,9 +251,17 @@ def add_tablets_data(session):
 
 
 def add_prescription_data(session):
+    """
+    To add prescription into the database
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     df = pd.read_csv("hospital/prescription.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = Prescription()
         obj.tablet_id = data['tablet_id']
         obj.diagnosis_id = data['diagnosis_id']
@@ -264,9 +277,10 @@ def add_prescription_data(session):
 
 
 def add_medicine_payment(session):
+    """ Adding medicine payment"""
     df = pd.read_csv("hospital/medicine_payment.csv")
 
-    for index, data in df.iterrows():
+    for _, data in df.iterrows():
         obj = MedicinePayment()
         obj.diagnosis_id = data['diagnosis_id']
         obj.payment = data['payment']
@@ -278,13 +292,16 @@ def add_medicine_payment(session):
 
 
 def main():
+    """Main Function"""
+    # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/hospital_db"
     engine = create_engine(conn, echo=True)
 
     Base.metadata.create_all(engine)
 
-    Session = sessionmaker(bind=engine, autoflush=False)
-    session = Session()
+    # Creating the session
+    session_factory = sessionmaker(bind=engine, autoflush=False)
+    session = session_factory()
 
     add_doctor_data(session)
     add_patient_data(session)

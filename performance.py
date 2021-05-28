@@ -3,17 +3,12 @@
 Performance of adding objects into database using three different methods.
 """
 import logging
-from sqlalchemy import Column, ForeignKey, inspect
-from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, FLOAT
+from sqlalchemy import Column, create_engine
+from sqlalchemy.dialects.mysql import INTEGER, FLOAT
 from sqlalchemy.ext.declarative import declarative_base
-from helpers import timer
-
-from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
 import pandas as pd
-
-from helpers import setup_logging
+from helpers import timer
 
 Base = declarative_base()
 
@@ -26,18 +21,20 @@ LOGGER_CONFIG_PATH = 'config/logging.json'
 class Values(Base):
     """
     To store the compressor values
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
 
     :ivar model: Model of the compressor
-    :vartype model: str
+    :vartype model: :class:`sqlalchemy.dialects.mysql.VARCHAR`
 
     :ivar condenser_temp: Inlet temperature to condenser
-    :vartype condenser_temp: float
+    :vartype condenser_temp: :class:`sqlalchemy.dialects.mysql.FLOAT`
 
     :ivar evaporator_temp: Outlet temperature to condenser
-    :vartype evaporator_temp: float
+    :vartype evaporator_temp: :class:`sqlalchemy.dialects.mysql.FLOAT`
 
     :ivar power: Power required for the compressor
-    :vartype power: float
+    :vartype power: :class:`sqlalchemy.dialects.mysql.FLOAT`
 
     """
     __tablename__ = 'values'
@@ -48,10 +45,10 @@ class Values(Base):
     cond_temp = Column(INTEGER)
     power = Column(FLOAT)
 
-    def __init__(self, model, tc, te, power):
+    def __init__(self, model, temp_e, temp_c, power):
         self.model_id = model
-        self.evap_temp = te
-        self.cond_temp = tc
+        self.evap_temp = temp_e
+        self.cond_temp = temp_c
         self.power = power
 
 
@@ -70,10 +67,10 @@ def add_one_at_a_time(session, df):
     """
 
     try:
-        for index, row in df.iterrows():
-            c1 = Values(row['model'], row['condenser_temp'], row['evaporator_temp'], row['power'])
-            session.add(c1)
-            # session.commit()
+        for _, row in df.iterrows():
+            values = Values(row['model'], row['condenser_temp'], row['evaporator_temp'], row['power'])
+            session.add(values)
+            session.commit()
     except Exception as ex:
         session.rollback()
         raise ex
@@ -96,9 +93,9 @@ def add_all(session, df):
     """
     obj_list = []
     try:
-        for index, row in df.iterrows():
-            c1 = Values(row['model'], row['condenser_temp'], row['evaporator_temp'], row['power'])
-            obj_list.append(c1)
+        for _, row in df.iterrows():
+            values = Values(row['model'], row['condenser_temp'], row['evaporator_temp'], row['power'])
+            obj_list.append(values)
 
         session.add_all(obj_list)
     except Exception as ex:
@@ -124,7 +121,7 @@ def add_bulk(session, df):
 
     obj_list = []
     try:
-        for index, row in df.iterrows():
+        for _, row in df.iterrows():
             obj_list.append(Values(row['model'], row['condenser_temp'], row['evaporator_temp'], row['power']))
 
         session.bulk_save_objects(obj_list)
@@ -144,7 +141,6 @@ def main():
     Base.metadata.create_all(engine)
 
     # Creating a session
-
     session_factory = sessionmaker(bind=engine, autoflush=False)
     session = session_factory()
 

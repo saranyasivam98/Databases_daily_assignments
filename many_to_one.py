@@ -24,6 +24,20 @@ LOGGER_CONFIG_PATH = 'config/logging.json'
 
 
 class Characters(Base):
+    """
+    Class to store the characters in database
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar character_name: The name of the character in the series
+    :vartype character_name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar cast_in: The series the character is in
+    :vartype cast_in: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar actor_name: Name of the actor who plays the character
+    :vartype actor_name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
     __tablename__ = 'characters'
     id = Column(INTEGER, primary_key=True, autoincrement=True)
     character_name = Column(VARCHAR(30))
@@ -34,6 +48,26 @@ class Characters(Base):
 
 
 class Series(Base):
+    """
+    Class to store the series details
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar name: Name of the series
+    :vartype name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar genre: Genre of the series
+    :vartype genre: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar imdb: IMDB rating of the series
+    :vartype imdb: :class:`sqlalchemy.dialects.mysql.FLOAT`
+
+    :ivar ott: The platform in which its streaming
+    :vartype ott: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar start_date:
+    :vartype start_date: :class:`sqlalchemy.dialects.mysql.DATETIME`
+    """
     __tablename__ = 'series'
     id = Column(INTEGER, primary_key=True, autoincrement=True)
     name = Column(VARCHAR(30), unique=True)
@@ -44,42 +78,65 @@ class Series(Base):
 
 
 def add_series(session, df):
-    try:
-        for index, row in df.iterrows():
-            c1 = Series()
-            c1.name = row['series']
-            c1.genre = row['genre']
-            c1.imdb = row['imdb']
-            c1.ott = row['OTT']
-            c1.start_date = row['start_date']
+    """
+    To add series to database
 
-            session.add(c1)
-    except:
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
+    try:
+        for _, row in df.iterrows():
+            series = Series()
+            series.name = row['series']
+            series.genre = row['genre']
+            series.imdb = row['imdb']
+            series.ott = row['OTT']
+            series.start_date = row['start_date']
+
+            session.add(series)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
 
 def add_chars(session, df):
-    try:
-        for index, row in df.iterrows():
-            c1 = Characters()
-            c1.character_name = row['character_name']
-            c1.cast_in = row['series_name']
-            c1.actor_name = row['actor_name']
-            series_obj = session.query(Series).filter_by(name=c1.cast_in).first()
-            c1.series = series_obj
+    """
+    To add characters to database
 
-            session.add(c1)
-    except:
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
+    try:
+        for _, row in df.iterrows():
+            chars = Characters()
+            chars.character_name = row['character_name']
+            chars.cast_in = row['series_name']
+            chars.actor_name = row['actor_name']
+            series_obj = session.query(Series).filter_by(name=chars.cast_in).first()
+            chars.series = series_obj
+
+            session.add(chars)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
 
 def main():
+    """Main function"""
     # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
     engine = create_engine(conn, echo=True)

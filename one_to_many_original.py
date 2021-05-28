@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+============================
+One to Many relationship
+============================
 One to Many relationship explained
 """
 import logging
@@ -9,11 +12,9 @@ from sqlalchemy.dialects.mysql import INTEGER, VARCHAR, FLOAT
 from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.orm import sessionmaker
 
 import pandas as pd
-
-from helpers import setup_logging
 
 Base = declarative_base()
 
@@ -24,6 +25,23 @@ LOGGER_CONFIG_PATH = 'config/logging.json'
 
 
 class Specifications(Base):
+    """
+    Class to store the specifications details
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar model: The model of the compressor
+    :vartype model: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar capacity_control: Control of the compressor
+    :vartype capacity_control: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar refrigerant: Refrigerant used.
+    :vartype refrigerant: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar technology: The motor technology inside the compressor
+    :vartype technology: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
     __tablename__ = 'specifications'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
@@ -34,6 +52,24 @@ class Specifications(Base):
 
 
 class Values(Base):
+    """
+    Class to store the values of each model.
+
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar model_id: The model of the compressor
+    :vartype model_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar evap_temp:Evaporator Temperature
+    :vartype evap_temp: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar cond_temp: Condenser Temperature
+    :vartype cond_temp: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar power: The power input for the compressor
+    :vartype power: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
     __tablename__ = 'values'
 
     id = Column(INTEGER, primary_key=True, autoincrement=True)
@@ -42,52 +78,70 @@ class Values(Base):
     cond_temp = Column(INTEGER)
     power = Column(FLOAT)
 
-    specs = relationship("Specifications", backref="values", cascade='all, delete')
-    # specs = relationship("Specifications", backref=backref("values", cascade='all, delete'))
+    specs = relationship("Specifications", backref=backref("values", cascade='all, delete'))
 
 
 def add_specs(session, df):
+    """
+    To add specifications into the database
 
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
     try:
-        for index, row in df.iterrows():
-            c1 = Specifications()
-            c1.model = row['Model']
-            c1.capacity_control = row['Capacity_control']
-            c1.refrigerant = row['Refrigerant']
-            c1.technology = row['Technology']
+        for _, row in df.iterrows():
+            specs = Specifications()
+            specs.model = row['Model']
+            specs.capacity_control = row['Capacity_control']
+            specs.refrigerant = row['Refrigerant']
+            specs.technology = row['Technology']
 
-            session.add(c1)
-    except:
+            session.add(specs)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
 
 def add_values(session, df):
+    """
+    To add values into the database
 
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :param df: Dataframe containing the values to be stored in the database
+    :type df: :class:`pandas.DataFrame`
+
+    :return: None
+    """
     try:
-        for index, row in df.iterrows():
-            v1 = Values()
+        for _, row in df.iterrows():
+            values = Values()
 
-            v1.model_id = row['model']
-            v1.power = row['power']
-            v1.cond_temp = row['condenser_temp']
-            v1.evap_temp = row['evaporator_temp']
-            specs_object = session.query(Specifications).filter_by(model=v1.model_id).one()
-            v1.specs = specs_object
+            values.model_id = row['model']
+            values.power = row['power']
+            values.cond_temp = row['condenser_temp']
+            values.evap_temp = row['evaporator_temp']
+            specs_object = session.query(Specifications).filter_by(model=values.model_id).one()
+            values.specs = specs_object
 
-            session.add(v1)
-    except:
+            session.add(values)
+    except Exception as ex:
         session.rollback()
-        raise
+        raise ex
     else:
         session.commit()
 
-    session.commit()
-
 
 def main():
+    """Main Function"""
     # setup_logging()
 
     # Creating engine
@@ -113,11 +167,9 @@ def main():
     add_values(session, df1)
 
     # If parent object(Specifications) is deleted, then all the children(Values) are also deleted
-    '''obj = session.query(Specifications).filter_by(id=6).one()
+    obj = session.query(Specifications).filter_by(id=1).one()
     session.delete(obj)
-    session.commit()'''
-
-    obj = Specifications('changed', )
+    session.commit()
 
 
 if __name__ == '__main__':

@@ -1,8 +1,12 @@
 # -- coding: UTF-8 --
 """
+================
+ABC Super Market
+================
 Build a database for the ABC super market assignment
 """
-
+import json
+import logging
 from sqlalchemy import Column, ForeignKey
 from sqlalchemy.orm import relationship
 from sqlalchemy.dialects.mysql import INTEGER, VARCHAR,  BIGINT, DATETIME
@@ -10,10 +14,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
-import pandas as pd
-import json
-import logging
 
 Base = declarative_base()
 
@@ -24,9 +24,27 @@ LOGGER_CONFIG_PATH = 'config/logging.json'
 
 
 class Staff(Base):
+    """
+    Class for storing the staff details.
+
+    :ivar p_key:The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar staff_code: Customer code
+    :vartype staff_code: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar staff_name: Customer name
+    :vartype staff_name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar staff_email: Customer email
+    :vartype staff_email: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar staff_ph_no: Customer phone number
+    :vartype staff_ph_no: :class:`sqlalchemy.dialects.mysql.BIGINT`
+    """
     __tablename__ = 'staff'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     staff_code = Column(VARCHAR(10), unique=True)
     staff_name = Column(VARCHAR(50), index=True)
     staff_email = Column(VARCHAR(50), unique=True)
@@ -44,9 +62,27 @@ class Staff(Base):
 
 
 class Customer(Base):
+    """
+    Class for storing the customer details.
+
+    :ivar p_key:The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar customer_code: Customer code
+    :vartype customer_code: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar customer_name: Customer name
+    :vartype customer_name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar customer_email: Customer email
+    :vartype customer_email: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar customer_ph_no: Customer phone number
+    :vartype customer_ph_no: :class:`sqlalchemy.dialects.mysql.BIGINT`
+    """
     __tablename__ = 'customer'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     customer_code = Column(VARCHAR(10), unique=True)
     customer_name = Column(VARCHAR(50), index=True)
     customer_email = Column(VARCHAR(50), unique=True)
@@ -64,9 +100,24 @@ class Customer(Base):
 
 
 class Branch(Base):
+    """
+    Class for storing the branch details.
+
+    :ivar p_key:The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar branch_code: Branch code
+    :vartype branch_code: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar branch_address: Branch address
+    :vartype branch_address: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar branch_ph_no: Branch phone number
+    :vartype branch_ph_no: :class:`sqlalchemy.dialects.mysql.BIGINT`
+    """
     __tablename__ = 'branch'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     branch_code = Column(VARCHAR(15), unique=True)
     branch_address = Column(VARCHAR(150))
     branch_ph_no = Column(BIGINT, unique=True)
@@ -82,9 +133,30 @@ class Branch(Base):
 
 
 class Transaction(Base):
+    """
+    Class for storing the transaction details.
+
+    :ivar p_key:The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar trans_code: Transaction code
+    :vartype trans_code: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar trans_date: Transaction date
+    :vartype trans_date: :class:`sqlalchemy.dialects.mysql.DATETIME`
+
+    :ivar branch_id: Branch id
+    :vartype branch_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar customer_id: Customer id
+    :vartype customer_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar staff_id: Staff id
+    :vartype staff_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+    """
     __tablename__ = 'transaction'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     trans_code = Column(VARCHAR(25), unique=True)
     trans_date = Column(DATETIME)
     branch_id = Column(INTEGER, ForeignKey("branch.id"))
@@ -101,9 +173,21 @@ class Transaction(Base):
 
 
 class Product(Base):
+    """
+    Class for storing the product details.
+
+    :ivar p_key: The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar product_name: Name of the product
+    :vartype product_name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar product_quantity: The quantity of the product
+    :vartype product_quantity: :class:`sqlalchemy.dialects.mysql.INTEGER`
+    """
     __tablename__ = 'products'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     product_name = Column(VARCHAR(25), unique=True)
     product_quantity = Column(INTEGER)
 
@@ -116,9 +200,24 @@ class Product(Base):
 
 
 class Purchase(Base):
+    """
+    Class for storing the purchase details.
+
+    :ivar p_key: The primary key for the table.
+    :vartype p_key: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar purchase_code: The purchase code
+    :vartype purchase_code: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar transaction_id: The transaction id
+    :vartype transaction_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar product_id: The id of the product purchased
+    :vartype product_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+    """
     __tablename__ = 'purchase'
 
-    id = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
+    p_key = Column(INTEGER, primary_key=True, autoincrement=True, index=True)
     purchase_code = Column(VARCHAR(25))
     transaction_id = Column(INTEGER, ForeignKey("transaction.id"))
     product_id = Column(INTEGER, ForeignKey("products.id"))
@@ -131,6 +230,13 @@ class Purchase(Base):
 
 
 def get_branch_data(path):
+    """
+    To create objects for each row in the file
+
+    :param path: The path of the file where the product data is stored.
+    :return: The object of Branch.
+    :rtype: Branch
+    """
     with open(path) as file:
         branch_data = json.load(file)
 
@@ -139,6 +245,13 @@ def get_branch_data(path):
 
 
 def get_customer_data(path):
+    """
+    To create objects for each row in the file
+
+    :param path: The path of the file where the product data is stored.
+    :return: The object of Customer.
+    :rtype: Customer
+    """
     with open(path) as file:
         customer_data = json.load(file)
 
@@ -147,6 +260,13 @@ def get_customer_data(path):
 
 
 def get_staff_data(path):
+    """
+    To create objects for each row in the file
+
+    :param path: The path of the file where the staff data is stored.
+    :return: The object of Staff.
+    :rtype: Staff
+    """
     with open(path) as file:
         staff_data = json.load(file)
 
@@ -155,6 +275,13 @@ def get_staff_data(path):
 
 
 def get_product_data(path):
+    """
+    To create objects for each row in the file
+
+    :param path: The path of the file where the product data is stored.
+    :return: The object of Product.
+    :rtype: Product
+    """
     with open(path) as file:
         staff_data = json.load(file)
 
@@ -163,6 +290,14 @@ def get_product_data(path):
 
 
 def add_transaction(session):
+    """
+    To add the row from transaction to database.
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     try:
         with open("abc_super_market/transactions.json") as file:
             transactions = json.load(file)
@@ -181,13 +316,22 @@ def add_transaction(session):
             obj.staff = staff_obj
 
             session.add(obj)
-    except:
+    except Exception as ex:
         session.rollback()
+        raise ex
     else:
         session.commit()
 
 
 def add_purchase(session):
+    """
+    To add the rows from purchase to database.
+
+    :param session: An sqlalchemy session
+    :type session: :class:`sqlalchemy.orm.session.Session`
+
+    :return: None
+    """
     try:
         with open("sample.json") as file:
             purchases = json.load(file)
@@ -204,13 +348,15 @@ def add_purchase(session):
             obj.product = product_obj
 
             session.add(obj)
-    except:
+    except Exception as ex:
         session.rollback()
+        raise ex
     else:
         session.commit()
 
 
 def main():
+    """ Main Function"""
     # Creating engine
     conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
     engine = create_engine(conn, echo=True)
