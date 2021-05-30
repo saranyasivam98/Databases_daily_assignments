@@ -1,0 +1,52 @@
+[
+  {
+    "purchase_id": "PURC_01032021_2159_001",
+    "trans_details": "01032021_2159_001",
+    "product_details": ["shampoo_1", "facewash_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_02032021_2203_001",
+    "trans_details": "02032021_2203_001",
+    "product_details": ["shampoo_3", "facewash_1", "soap_2", "shampoo_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_03032021_2203_002",
+    "trans_details": "03032021_2203_002",
+    "product_details": ["shampoo_1", "shampoo_3", "facewash_1", "soap_2", "shampoo_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_04032021_2205_001",
+    "trans_details": "04032021_2205_001",
+    "product_details": ["shampoo_1", "facewash_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_05032021_2207_001",
+    "trans_details": "05032021_2207_001",
+    "product_details": ["shampoo_2", "facewash_1", "soap_2"]
+  },
+  {
+    "purchase_id": "PURC_06032021_2210_001",
+    "trans_details": "06032021_2210_001",
+    "product_details": ["shampoo_1", "soap_1"]
+  },
+  {
+    "purchase_id": "PURC_07032021_2210_002",
+    "trans_details": "07032021_2210_002",
+    "product_details": ["shampoo_1", "facewash_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_08032021_2212_001",
+    "trans_details": "08032021_2212_001",
+    "product_details": ["shampoo_3", "facewash_1", "soap_2", "soap_3"]
+  },
+  {
+    "purchase_id": "PURC_09032021_2215_001",
+    "trans_details": "09032021_2215_001",
+    "product_details": ["shampoo_2", "facewash_2"]
+  },
+  {
+    "purchase_id": "PURC_10032021_2217_001",
+    "trans_details": "10032021_2217_001",
+    "product_details": ["shampoo_1", "soap_1", "facewash_2"]
+  }
+]

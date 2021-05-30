@@ -1,0 +1,625 @@
+************* Module chunk_wise
+chunk_wise.py:18:0: C0103: Constant name "connection" doesn't conform to '(([A-Z_][A-Z0-9_]*)|(__.*__))$' pattern (invalid-name)
+chunk_wise.py:32:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+chunk_wise.py:57:4: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+************* Module create_engine
+create_engine.py:45:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module hospital
+hospital.py:22:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:25:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:36:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:39:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:50:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:51:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:56:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:59:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:73:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:80:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:83:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:94:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:97:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+hospital.py:106:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:112:0: C0115: Missing class docstring (missing-class-docstring)
+hospital.py:115:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module many_to_one
+many_to_one.py:42:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+many_to_one.py:72:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module multiprocessing_sqlalchemy
+multiprocessing_sqlalchemy.py:44:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+multiprocessing_sqlalchemy.py:138:0: C0103: Constant name "conn_string" doesn't conform to '(([A-Z_][A-Z0-9_]*)|(__.*__))$' pattern (invalid-name)
+************* Module one_to_many_original
+one_to_many_original.py:47:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+one_to_many_original.py:75:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module papers
+papers.py:52:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module performance
+performance.py:42:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module save_images
+save_images.py:34:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module states
+states.py:207:0: C0303: Trailing whitespace (trailing-whitespace)
+states.py:39:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+************* Module text_db
+text_db.py:19:0: C0103: Constant name "conn" doesn't conform to '(([A-Z_][A-Z0-9_]*)|(__.*__))$' pattern (invalid-name)
+text_db.py:32:4: C0103: Class attribute name "id" doesn't conform to '([A-Za-z_][A-Za-z0-9_]{2,30}|(__.*__))$' pattern (invalid-name)
+text_db.py:56:4: R1732: Consider using 'with' for resource-allocating operations (consider-using-with)
+text_db.py:75:10: W1309: Using an f-string that does not have any interpolated variables (f-string-without-interpolation)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==create_engine:77
+==multiprocessing_sqlalchemy:56
+def get_db_conn_str(dialect, driver, user, password, host, port, schema):
+    """
+    Get the database connection string as understood by sqlalchemy
+
+    :param dialect: The database dialect i.e. mysql, postgresql etc.
+    :type dialect: str
+
+    :param driver: The database driver i.e. pymysql, psycopg2 etc.
+    :type driver: str
+
+    :param user: The database user
+    :type user: str
+
+    :param password: The database password
+    :type password: str
+
+    :param host: The database host
+    :type host: str
+
+    :param port: The database port
+    :type port: str
+
+    :param schema: The database schema
+    :type schema: str
+
+    :return: The connection string
+    :rtype: str
+    """
+    conn_str = ""
+    conn_str += dialect
+    conn_str += "+"
+    conn_str += driver
+    conn_str += "://"
+    conn_str += user
+    conn_str += ":"
+    conn_str += password
+    conn_str += "@"
+    conn_str += host
+    conn_str += ":"
+    conn_str += port
+    conn_str += "/"
+    conn_str += schema
+
+    return conn_str
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==create_engine:11
+==one_to_many_original:14
+from sqlalchemy.orm import sessionmaker
+
+import pandas as pd
+
+Base = declarative_base()
+
+__author__ = 'saranya@gyandata.com'
+
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
+
+
+class Specifications(Base):
+    """
+    To store the properties of compressor
+
+    :ivar id: Primary key of the table
+    :vartype id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar model: Model of the compressor
+    :vartype model: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar technology: Technology of the motor
+    :vartype technology: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar refrigerant: Refrigerant used in the compressor
+    :vartype refrigerant: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar capacity_control: Speed control of the compressor
+    :vartype capacity_control: :class:`sqlalchemy.dialects.mysql.VARCHAR` (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:120
+==many_to_many:105
+            session.add(child)
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+
+def main():
+    """Main Function"""
+    # Creating engine
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
+    engine = create_engine(conn, echo=True)
+
+    with engine.connect() as conn:
+        conn.execute("DROP TABLE learning.association")
+        conn.execute("DROP TABLE learning.child")
+        conn.execute("DROP TABLE learning.parent")
+
+    # Creating the tables in the DB
+    Base.metadata.create_all(engine)
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==abcsm_class:350
+==many_to_one:130
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+
+def main():
+    """ Main Function"""
+    # Creating engine
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
+    engine = create_engine(conn, echo=True)
+
+    # Creating the tables in the DB
+    Base.metadata.create_all(engine)
+
+    # Creating the session
+    session_factory = sessionmaker(bind=engine)
+    session = session_factory()
+
+    # Adding Branch, Staff, Customer, Products data (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:48
+==many_to_many:44
+class Child(Base):
+    """
+    To store details of child
+
+    :ivar child_id: Primary key of the table
+    :vartype child_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar name: Nam eof the parent
+    :vartype name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar residence: Name of the residence
+    :vartype residence: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
+    __tablename__ = 'child'
+    child_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    name = Column(VARCHAR(50))
+    residence = Column(VARCHAR(50))
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:21
+==many_to_many:25
+class Parent(Base):
+    """
+    To store details of parent
+
+    :ivar parent_id: Primary key of the table
+    :vartype parent_id: :class:`sqlalchemy.dialects.mysql.INTEGER`
+
+    :ivar name: Nam eof the parent
+    :vartype name: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+
+    :ivar family: Name of the family
+    :vartype family: :class:`sqlalchemy.dialects.mysql.VARCHAR`
+    """
+    __tablename__ = 'parent'
+    parent_id = Column(INTEGER, primary_key=True, autoincrement=True)
+    name = Column(VARCHAR(50))
+    family = Column(VARCHAR(50))
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==many_to_one:10
+==one_to_many_original:11
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import pandas as pd
+
+Base = declarative_base()
+
+__author__ = 'saranya@gyandata.com'
+
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 3 files
+==create_engine:42
+==multiprocessing_sqlalchemy:41
+==states:36
+    __tablename__ = 'specifications'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    model = Column(VARCHAR(10), unique=True)
+    capacity_control = Column(VARCHAR(15))
+    refrigerant = Column(VARCHAR(10))
+    technology = Column(VARCHAR(15))
+
+    def __init__(self, model, cap, ref, tech):
+        self.model = model
+        self.technology = tech
+        self.refrigerant = ref
+        self.capacity_control = cap
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==chunk_wise:30
+==text_db:30
+    __tablename__ = 'book'
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    line = Column(TEXT)
+
+    def __init__(self, line):
+        self.line = line
+
+
+Base.metadata.create_all(engine)
+session_factory = sessionmaker(bind=engine, autoflush=False)   # try with scoped session
+session = session_factory()
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:86
+==many_to_many:74
+    try:
+        for _, row in df.iterrows():
+            parent = Parent()
+            parent.name = row['parent_name']
+            parent.family = row['family']
+            session.add(parent)
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 4 files
+==abcsm_class:350
+==cascades:121
+==many_to_many:106
+==many_to_one:130
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+
+def main():
+    """ Main Function"""
+    # Creating engine
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
+    engine = create_engine(conn, echo=True)
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==papers:61
+==save_images:88
+def main():
+    """ Main Function"""
+    # Create engine
+    conn = "mysql+pymysql://saran:SADA2028jaya@localhost/learning"
+    engine = create_engine(conn, echo=True)
+
+    Base.metadata.create_all(engine)
+
+    # Creating session
+    session_factory = sessionmaker(bind=engine, autoflush=False)
+    session = session_factory()
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==create_engine:11
+==many_to_one:13
+from sqlalchemy.orm import sessionmaker
+
+import pandas as pd
+
+Base = declarative_base()
+
+__author__ = 'saranya@gyandata.com'
+
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:6
+==many_to_many:10
+from sqlalchemy.dialects.mysql import INTEGER, VARCHAR
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import pandas as pd
+
+Base = declarative_base()
+
+association_table = Table('association', Base.metadata, (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 4 files
+==create_engine:13
+==hospital:11
+==many_to_one:15
+==one_to_many_original:16
+import pandas as pd
+
+Base = declarative_base()
+
+__author__ = 'saranya@gyandata.com'
+
+LOGGER = logging.getLogger(__name__)
+LOGGER_CONFIG_PATH = 'config/logging.json'
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==chunk_wise:7
+==text_db:8
+from sqlalchemy import Column
+from sqlalchemy.dialects.mysql import INTEGER, TEXT
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+Base = declarative_base()
+
+thread_local = threading.local()
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 6 files
+==abcsm_class:350
+==cascades:121
+==many_to_many:106
+==many_to_one:130
+==one_to_many_original:135
+==performance:127
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+
+def main():
+    """Main Function"""
+    # setup_logging() (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 4 files
+==cascades:7
+==many_to_many:11
+==many_to_one:10
+==one_to_many_original:11
+from sqlalchemy.ext.declarative import declarative_base
+
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+import pandas as pd
+
+Base = declarative_base()
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 6 files
+==abcsm_class:350
+==cascades:121
+==create_engine:137
+==many_to_many:106
+==many_to_one:130
+==performance:127
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+
+def main():
+    """ Main function""" (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==create_engine:136
+==one_to_many_original:103
+            session.add(specs)
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 4 files
+==create_engine:42
+==multiprocessing_sqlalchemy:41
+==one_to_many_original:44
+==states:36
+    __tablename__ = 'specifications'
+
+    id = Column(INTEGER, primary_key=True, autoincrement=True)
+    model = Column(VARCHAR(10), unique=True)
+    capacity_control = Column(VARCHAR(15))
+    refrigerant = Column(VARCHAR(10))
+    technology = Column(VARCHAR(15))
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 14 files
+==abcsm_class:318
+==abcsm_class:350
+==cascades:121
+==cascades:92
+==create_engine:137
+==many_to_many:106
+==many_to_many:80
+==many_to_one:101
+==many_to_one:130
+==one_to_many_original:104
+==one_to_many_original:135
+==performance:100
+==performance:127
+==performance:73
+    except Exception as ex:
+        session.rollback()
+        raise ex
+    else:
+        session.commit()
+
+ (duplicate-code)
+text_db.py:1:0: R0801: Similar lines in 2 files
+==cascades:111
+==many_to_many:96
+    try:
+        for _, row in df.iterrows():
+            child = Child()
+            child.name = row['child_name']
+            child.residence = row['Residence']
+            father_obj = session.query(Parent).filter_by(name=row['father_name']).first() (duplicate-code)
+
+
+Report
+======
+1151 statements analysed.
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |19     |19         |=          |100.00      |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |31     |31         |=          |70.97       |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|method   |20     |20         |=          |100.00      |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|function |66     |66         |=          |100.00      |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    abcsm_class (loading,query_sql)
+    helpers (add_hosp,multiprocessing_sqlalchemy,performance,query_sql,states)
+    hospital (add_hosp)
+    pandas (cascades,create_engine,hospital,many_to_many,many_to_one,one_to_many_original,performance,save_images)
+    sqlalchemy (abcsm_class,add_hosp,cascades,chunk_wise,create_engine,hospital,loading,many_to_many,many_to_one,multiprocessing_sqlalchemy,one_to_many_original,papers,performance,query_sql,save_images,states,text_db)
+      \-dialects 
+      | \-mysql (abcsm_class,cascades,chunk_wise,create_engine,hospital,many_to_many,many_to_one,multiprocessing_sqlalchemy,one_to_many_original,papers,performance,save_images,states,text_db)
+      |   \-JSON (papers)
+      \-ext 
+      | \-declarative (abcsm_class,cascades,chunk_wise,create_engine,hospital,many_to_many,many_to_one,multiprocessing_sqlalchemy,one_to_many_original,papers,performance,save_images,states,text_db)
+      \-orm (abcsm_class,add_hosp,cascades,chunk_wise,create_engine,hospital,loading,many_to_many,many_to_one,one_to_many_original,papers,performance,query_sql,save_images,states,text_db)
+      \-pool (multiprocessing_sqlalchemy)
+
+
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |1238   |45.48 |1238     |=          |
++----------+-------+------+---------+-----------+
+|docstring |875    |32.15 |875      |=          |
++----------+-------+------+---------+-----------+
+|comment   |85     |3.12  |85       |=          |
++----------+-------+------+---------+-----------+
+|empty     |524    |19.25 |524      |=          |
++----------+-------+------+---------+-----------+
+
+
+
+Duplication
+-----------
+
++-------------------------+-------+---------+-----------+
+|                         |now    |previous |difference |
++=========================+=======+=========+===========+
+|nb duplicated lines      |591    |591      |=          |
++-------------------------+-------+---------+-----------+
+|percent duplicated lines |22.019 |22.019   |=          |
++-------------------------+-------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |32     |38       |-6.00      |
++-----------+-------+---------+-----------+
+|refactor   |25     |25       |=          |
++-----------+-------+---------+-----------+
+|warning    |1      |1        |=          |
++-----------+-------+---------+-----------+
+|error      |0      |0        |=          |
++-----------+-------+---------+-----------+
+
+
+
+% errors / warnings by module
+-----------------------------
+
++---------------------------+------+--------+---------+-----------+
+|module                     |error |warning |refactor |convention |
++===========================+======+========+=========+===========+
+|text_db                    |0.00  |100.00  |96.00    |6.25       |
++---------------------------+------+--------+---------+-----------+
+|chunk_wise                 |0.00  |0.00    |4.00     |6.25       |
++---------------------------+------+--------+---------+-----------+
+|hospital                   |0.00  |0.00    |0.00     |50.00      |
++---------------------------+------+--------+---------+-----------+
+|states                     |0.00  |0.00    |0.00     |6.25       |
++---------------------------+------+--------+---------+-----------+
+|one_to_many_original       |0.00  |0.00    |0.00     |6.25       |
++---------------------------+------+--------+---------+-----------+
+|multiprocessing_sqlalchemy |0.00  |0.00    |0.00     |6.25       |
++---------------------------+------+--------+---------+-----------+
+|many_to_one                |0.00  |0.00    |0.00     |6.25       |
++---------------------------+------+--------+---------+-----------+
+|save_images                |0.00  |0.00    |0.00     |3.12       |
++---------------------------+------+--------+---------+-----------+
+|performance                |0.00  |0.00    |0.00     |3.12       |
++---------------------------+------+--------+---------+-----------+
+|papers                     |0.00  |0.00    |0.00     |3.12       |
++---------------------------+------+--------+---------+-----------+
+|create_engine              |0.00  |0.00    |0.00     |3.12       |
++---------------------------+------+--------+---------+-----------+
+
+
+
+Messages
+--------
+
++-------------------------------+------------+
+|message id                     |occurrences |
++===============================+============+
+|duplicate-code                 |23          |
++-------------------------------+------------+
+|invalid-name                   |22          |
++-------------------------------+------------+
+|missing-class-docstring        |9           |
++-------------------------------+------------+
+|consider-using-with            |2           |
++-------------------------------+------------+
+|trailing-whitespace            |1           |
++-------------------------------+------------+
+|f-string-without-interpolation |1           |
++-------------------------------+------------+
+
+
+
+
+------------------------------------------------------------------
+Your code has been rated at 9.50/10 (previous run: 9.44/10, +0.05)
+
