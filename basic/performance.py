@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+===============================
+Performance od adding objects
+===============================
 Performance of adding objects into database using three different methods.
 """
 import logging

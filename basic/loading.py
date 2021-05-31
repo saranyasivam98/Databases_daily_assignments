@@ -3,11 +3,12 @@
 ===================
 Loading techniques
 ===================
+Different loading techniques
 """
 import logging
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, joinedload
-from abcsm_class import Transaction, Purchase
+from abc_super_market.abcsm_class import Transaction, Purchase
 
 __author__ = 'saranya@gyandata.com'
 

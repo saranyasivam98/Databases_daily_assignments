@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+========================
+Transaction states
+========================
 Different Transaction states
 """
 import logging
