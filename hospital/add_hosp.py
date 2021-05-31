@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+=============================
+Hospital database operations
+=============================
 Explaining the use cases of the hospital database
 """
 
