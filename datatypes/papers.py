@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+==============
+Text and Json
+==============
 Code that illustrates the use of TEXT and JSON datatype
 """
 

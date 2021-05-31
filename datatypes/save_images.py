@@ -1,8 +1,9 @@
 # -- coding: UTF-8 --
 """
 ======================
+ BLOB
+======================
 To save images as BLOB
-=======================
 """
 import datetime
 from sqlalchemy import Column, create_engine
@@ -35,8 +36,7 @@ class SingleLabelClassificationData(Base):
     label = Column(VARCHAR(10))
     image = Column(LONGBLOB)
     # file_name
-    # file_extension to retrieve the image
-    saved_time = Column(TIMESTAMP, datetime.datetime.now())  # When the object is created. Client side
+    # file_extension to retrieve the image # When the object is created. Client side
 
 
 def read_file(filename):
