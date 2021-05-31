@@ -1,5 +1,8 @@
 # -- coding: UTF-8 --
 """
+========================================
+Deletion in many to many relationships
+========================================
 Explaining many to many relationships
 """
 from sqlalchemy import Table, Column, ForeignKey
